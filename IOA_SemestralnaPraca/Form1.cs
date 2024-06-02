@@ -1,10 +1,14 @@
+using IOA_SemestralnaPraca.Algorithm;
+using IOA_SemestralnaPraca.Structures;
+
 namespace IOA_SemestralnaPraca
 {
     public partial class Form1 : Form
     {
-        public Form1()
+
+        public Form1(ForwardStar parStar, Dijkstra parDjikstra)
         {
-            InitializeComponent();
+            
         }
 
         private void label2_Click(object sender, EventArgs e)
@@ -43,6 +47,11 @@ namespace IOA_SemestralnaPraca
         }
 
         private void pictureBox1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void pictureBox1_Paint(object sender, PaintEventArgs e)
         {
 
         }

@@ -31,6 +31,10 @@
             tabControl1 = new TabControl();
             tabPage1 = new TabPage();
             groupBox5 = new GroupBox();
+            listBox1 = new ListBox();
+            button7 = new Button();
+            numericUpDown1 = new NumericUpDown();
+            label9 = new Label();
             groupBox4 = new GroupBox();
             label8 = new Label();
             label7 = new Label();
@@ -59,19 +63,15 @@
             label1 = new Label();
             textBox1 = new TextBox();
             pictureBox1 = new PictureBox();
-            label9 = new Label();
-            numericUpDown1 = new NumericUpDown();
-            button7 = new Button();
-            listBox1 = new ListBox();
             tabControl1.SuspendLayout();
             tabPage1.SuspendLayout();
             groupBox5.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)numericUpDown1).BeginInit();
             groupBox4.SuspendLayout();
             groupBox2.SuspendLayout();
             groupBox3.SuspendLayout();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown1).BeginInit();
             SuspendLayout();
             // 
             // tabControl1
@@ -110,6 +110,41 @@
             groupBox5.TabIndex = 12;
             groupBox5.TabStop = false;
             groupBox5.Text = "Clarke-Wright";
+            // 
+            // listBox1
+            // 
+            listBox1.FormattingEnabled = true;
+            listBox1.ItemHeight = 15;
+            listBox1.Location = new Point(6, 77);
+            listBox1.Name = "listBox1";
+            listBox1.Size = new Size(352, 304);
+            listBox1.TabIndex = 13;
+            // 
+            // button7
+            // 
+            button7.Location = new Point(233, 27);
+            button7.Name = "button7";
+            button7.Size = new Size(75, 23);
+            button7.TabIndex = 12;
+            button7.Text = "Vyrieš";
+            button7.UseVisualStyleBackColor = true;
+            // 
+            // numericUpDown1
+            // 
+            numericUpDown1.Location = new Point(107, 27);
+            numericUpDown1.Name = "numericUpDown1";
+            numericUpDown1.Size = new Size(67, 23);
+            numericUpDown1.TabIndex = 1;
+            // 
+            // label9
+            // 
+            label9.AutoSize = true;
+            label9.Location = new Point(9, 35);
+            label9.Name = "label9";
+            label9.Size = new Size(92, 15);
+            label9.TabIndex = 0;
+            label9.Text = "Kapacita vozidla";
+            label9.Click += label9_Click;
             // 
             // groupBox4
             // 
@@ -382,41 +417,7 @@
             pictureBox1.TabIndex = 0;
             pictureBox1.TabStop = false;
             pictureBox1.Click += pictureBox1_Click;
-            // 
-            // label9
-            // 
-            label9.AutoSize = true;
-            label9.Location = new Point(9, 35);
-            label9.Name = "label9";
-            label9.Size = new Size(92, 15);
-            label9.TabIndex = 0;
-            label9.Text = "Kapacita vozidla";
-            label9.Click += label9_Click;
-            // 
-            // numericUpDown1
-            // 
-            numericUpDown1.Location = new Point(107, 27);
-            numericUpDown1.Name = "numericUpDown1";
-            numericUpDown1.Size = new Size(67, 23);
-            numericUpDown1.TabIndex = 1;
-            // 
-            // button7
-            // 
-            button7.Location = new Point(233, 27);
-            button7.Name = "button7";
-            button7.Size = new Size(75, 23);
-            button7.TabIndex = 12;
-            button7.Text = "Vyrieš";
-            button7.UseVisualStyleBackColor = true;
-            // 
-            // listBox1
-            // 
-            listBox1.FormattingEnabled = true;
-            listBox1.ItemHeight = 15;
-            listBox1.Location = new Point(6, 77);
-            listBox1.Name = "listBox1";
-            listBox1.Size = new Size(352, 304);
-            listBox1.TabIndex = 13;
+            pictureBox1.Paint += pictureBox1_Paint;
             // 
             // Form1
             // 
@@ -430,6 +431,7 @@
             tabPage1.ResumeLayout(false);
             groupBox5.ResumeLayout(false);
             groupBox5.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)numericUpDown1).EndInit();
             groupBox4.ResumeLayout(false);
             groupBox4.PerformLayout();
             groupBox2.ResumeLayout(false);
@@ -439,7 +441,6 @@
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown1).EndInit();
             ResumeLayout(false);
         }
 

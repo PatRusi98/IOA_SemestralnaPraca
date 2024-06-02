@@ -33,7 +33,8 @@ namespace IOA_SemestralnaPraca.Utils
                             Y = double.Parse(lineVal[1])
                         },
                         Type = NodeType.Unspecified,
-                        Capacity = 0
+                        Capacity = 0,
+                        Selected = false
                     });
                 }
                 counter++;
@@ -54,6 +55,18 @@ namespace IOA_SemestralnaPraca.Utils
             string? line;
 
             StreamReader file = new StreamReader(path);
+            bool twoway = false;
+            switch (file.ReadLine())
+            {
+                case "oneway":
+                    twoway = false;
+                    break;
+                case "twoway":
+                    twoway = true;
+                    break;
+                default:
+                    throw new Exception("Invalid file format");
+            }
 
             while ((line = file.ReadLine()) != null)
             {
@@ -72,6 +85,16 @@ namespace IOA_SemestralnaPraca.Utils
                     NodeB = nodeB,
                     Distance = EuclideanDistance(nodeA.Coordinates, nodeB.Coordinates)
                 });
+
+                if (twoway)
+                {
+                    loadedEdges.Add(new Edge
+                    {
+                        NodeA = nodeB,
+                        NodeB = nodeA,
+                        Distance = EuclideanDistance(nodeB.Coordinates, nodeA.Coordinates)
+                    });
+                }
             }
             file.Close();
 
