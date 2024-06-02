@@ -39,7 +39,7 @@ namespace IOA_SemestralnaPraca.Algorithm
                 }
 
                 visited.Add(currentNodeId);
-                int startIndex = _forwardStar.NodePointers[currentNodeId - 1]; // Upravené pre ID začínajúce od 1
+                int startIndex = _forwardStar.NodePointers[currentNodeId - 1];
                 int endIndex = (currentNodeId < _forwardStar.NodePointers.Count) ? _forwardStar.NodePointers[currentNodeId] : _forwardStar.EdgesArray.Count;
 
                 for (int i = startIndex; i < endIndex; i++)
@@ -69,7 +69,7 @@ namespace IOA_SemestralnaPraca.Algorithm
                 var distances = FindShortestPaths(node.ID);
                 foreach (var targetNode in _nodes.Values)
                 {
-                    distanceMatrix[node.ID - 1, targetNode.ID - 1] = distances[targetNode.ID]; // Upravené pre ID začínajúce od 1
+                    distanceMatrix[node.ID - 1, targetNode.ID - 1] = distances[targetNode.ID];
                 }
             }
 

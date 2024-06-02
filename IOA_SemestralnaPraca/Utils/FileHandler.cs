@@ -12,6 +12,7 @@ namespace IOA_SemestralnaPraca.Utils
             string? line;
             var counter = 0;
             var nodeNumber = int.MinValue;
+            var nodeCapacity = double.MinValue;
 
             StreamReader file = new StreamReader(path);
 
@@ -19,7 +20,9 @@ namespace IOA_SemestralnaPraca.Utils
             {
                 if (counter % 2 == 0)
                 {
-                    nodeNumber = int.Parse(line);
+                    var lineVal = line.Split('-');
+                    nodeNumber = int.Parse(lineVal[0]);
+                    nodeCapacity = double.Parse(lineVal[1]);
                 }
                 else
                 {
@@ -32,8 +35,8 @@ namespace IOA_SemestralnaPraca.Utils
                             X = double.Parse(lineVal[0]),
                             Y = double.Parse(lineVal[1])
                         },
-                        Type = NodeType.Unspecified,
-                        Capacity = 0,
+                        Type = nodeNumber == 1 ? NodeType.PrimarySource : NodeType.Customer,
+                        Capacity = nodeCapacity,
                         Selected = false
                     });
                 }
