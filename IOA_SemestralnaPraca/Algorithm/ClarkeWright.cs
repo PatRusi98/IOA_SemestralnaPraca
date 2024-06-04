@@ -10,6 +10,7 @@ namespace IOA_SemestralnaPraca.Algorithm
         private readonly Dictionary<int, Node> _nodes;
         private readonly Node _depot;
         private readonly double _vehicleCapacity;
+        private readonly Dictionary<int, double> _depotDistances;
 
         public ClarkeWright(ForwardStar forwardStar, List<Node> nodes, double vehicleCapacity)
         {
@@ -17,6 +18,8 @@ namespace IOA_SemestralnaPraca.Algorithm
             _nodes = nodes.ToDictionary(n => n.ID);
             _depot = nodes.First(n => n.Type == NodeType.PrimarySource);
             _vehicleCapacity = vehicleCapacity;
+            var dijkstra = new Dijkstra(_forwardStar, nodes);
+            _depotDistances = dijkstra.FindShortestPaths(_depot.ID);
         }
 
         public List<List<int>> Execute()
@@ -70,15 +73,39 @@ namespace IOA_SemestralnaPraca.Algorithm
 
         private List<Saving> CalculateSavings()
         {
+            //var savings = new List<Saving>();
+
+            //foreach (var edge in _forwardStar.EdgesArray)
+            //{
+            //    if (edge.NodeA.ID == _depot.ID || edge.NodeB.ID == _depot.ID) continue;
+
+            //    //double savingValue = edge.Distance -
+            //    //    (_forwardStar.EdgesArray.First(e => e.NodeA.ID == _depot.ID && e.NodeB.ID == edge.NodeA.ID).Distance +
+            //    //     _forwardStar.EdgesArray.First(e => e.NodeA.ID == _depot.ID && e.NodeB.ID == edge.NodeB.ID).Distance);
+
+            //    //TODO
+            //    (bool, Edge) edge1 = _forwardStar.FindConnection(edge.NodeA.ID, edge.NodeB.ID);
+            //    (bool, Edge) edge2 = _forwardStar.FindConnection(edge.NodeA.ID, edge.NodeB.ID);
+
+            //    if (!edge1.Item1 || !edge2.Item1)
+            //        continue;
+
+            //    double savingValue = edge.Distance - _forwardStar.
+
+            //    savings.Add(new Saving(edge.NodeA.ID, edge.NodeB.ID, savingValue));
+            //}
+
+            //return savings;
+
             var savings = new List<Saving>();
 
             foreach (var edge in _forwardStar.EdgesArray)
             {
                 if (edge.NodeA.ID == _depot.ID || edge.NodeB.ID == _depot.ID) continue;
 
-                double savingValue = edge.Distance -
-                    (_forwardStar.EdgesArray.First(e => e.NodeA.ID == _depot.ID && e.NodeB.ID == edge.NodeA.ID).Distance +
-                     _forwardStar.EdgesArray.First(e => e.NodeA.ID == _depot.ID && e.NodeB.ID == edge.NodeB.ID).Distance);
+                double distanceDepotA = _depotDistances[edge.NodeA.ID];
+                double distanceDepotB = _depotDistances[edge.NodeB.ID];
+                double savingValue = distanceDepotA + distanceDepotB - edge.Distance;
 
                 savings.Add(new Saving(edge.NodeA.ID, edge.NodeB.ID, savingValue));
             }

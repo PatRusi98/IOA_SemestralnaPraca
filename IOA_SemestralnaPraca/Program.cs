@@ -15,23 +15,28 @@ namespace IOA_SemestralnaPraca
             // To customize application configuration such as set high DPI settings or default font,
             // see https://aka.ms/applicationconfiguration.
 
-            var nodesFile = "_data/_defaultNodes.txt";
-            var edgesFile = "_data/_defaultEdges.txt";
+            // TEST DO KONZOLY
+            //var nodesFile = "_data/_defaultNodes.txt";
+            //var edgesFile = "_data/_defaultEdges.txt";
 
-            FileHandler handler = new FileHandler();
-            var nodes = handler.LoadNodes(nodesFile);
-            var edges = handler.LoadConnections(edgesFile, nodes);
+            //FileHandler handler = new FileHandler();
+            //var nodes = handler.LoadNodes(nodesFile);
+            //var edges = handler.LoadConnections(edgesFile, nodes);
 
-            ForwardStar star = new ForwardStar(nodes, edges);
-            Dijkstra dijkstra = new Dijkstra(star, nodes);
+            //ForwardStar star = new ForwardStar(nodes, edges);
+            //Dijkstra dijkstra = new Dijkstra(star, nodes);
+            //ClarkeWright cw = new ClarkeWright(star, nodes, 100);
 
-            var distances = dijkstra.FindShortestPaths(5);
-            var matrix = dijkstra.CreateDistanceMatrix();
+            //var distances = dijkstra.FindShortestPaths(5);
+            //var matrix = dijkstra.CreateDistanceMatrix();
+            //var clarkeWright = cw.Execute();
 
-            System.Console.WriteLine("done");
+            //Console.WriteLine(cw.ToString());
 
-            //ApplicationConfiguration.Initialize();
-            //Application.Run(new Form1());
+            //System.Console.WriteLine("done");
+
+            ApplicationConfiguration.Initialize();
+            Application.Run(new Form1());
         }
     }
 }

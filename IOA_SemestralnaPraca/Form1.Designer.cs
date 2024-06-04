@@ -53,6 +53,7 @@
             radioButton1 = new RadioButton();
             radioButton2 = new RadioButton();
             groupBox1 = new GroupBox();
+            label10 = new Label();
             textBox6 = new TextBox();
             button1 = new Button();
             comboBox1 = new ComboBox();
@@ -128,6 +129,7 @@
             button7.TabIndex = 12;
             button7.Text = "Vyrieš";
             button7.UseVisualStyleBackColor = true;
+            button7.Click += button7_Click;
             // 
             // numericUpDown1
             // 
@@ -194,6 +196,7 @@
             button5.TabIndex = 11;
             button5.Text = "Uložiť sieť";
             button5.UseVisualStyleBackColor = true;
+            button5.Click += button5_Click;
             // 
             // button4
             // 
@@ -203,6 +206,7 @@
             button4.TabIndex = 10;
             button4.Text = "Načítať sieť";
             button4.UseVisualStyleBackColor = true;
+            button4.Click += button4_Click;
             // 
             // groupBox2
             // 
@@ -245,6 +249,7 @@
             textBox5.Name = "textBox5";
             textBox5.Size = new Size(227, 23);
             textBox5.TabIndex = 10;
+            textBox5.TextChanged += textBox5_TextChanged;
             // 
             // textBox4
             // 
@@ -252,6 +257,7 @@
             textBox4.Name = "textBox4";
             textBox4.Size = new Size(227, 23);
             textBox4.TabIndex = 9;
+            textBox4.TextChanged += textBox4_TextChanged;
             // 
             // label6
             // 
@@ -291,6 +297,7 @@
             textBox3.Name = "textBox3";
             textBox3.Size = new Size(172, 23);
             textBox3.TabIndex = 8;
+            textBox3.TextChanged += textBox3_TextChanged;
             // 
             // radioButton1
             // 
@@ -317,6 +324,7 @@
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(label10);
             groupBox1.Controls.Add(textBox6);
             groupBox1.Controls.Add(button1);
             groupBox1.Controls.Add(comboBox1);
@@ -333,12 +341,22 @@
             groupBox1.TabStop = false;
             groupBox1.Text = "Vrchol";
             // 
+            // label10
+            // 
+            label10.AutoSize = true;
+            label10.Location = new Point(83, 30);
+            label10.Name = "label10";
+            label10.Size = new Size(0, 15);
+            label10.TabIndex = 11;
+            label10.Click += label10_Click;
+            // 
             // textBox6
             // 
             textBox6.Location = new Point(200, 52);
             textBox6.Name = "textBox6";
             textBox6.Size = new Size(108, 23);
             textBox6.TabIndex = 10;
+            textBox6.TextChanged += textBox6_TextChanged;
             // 
             // button1
             // 
@@ -356,6 +374,7 @@
             comboBox1.Name = "comboBox1";
             comboBox1.Size = new Size(227, 23);
             comboBox1.TabIndex = 8;
+            comboBox1.SelectedIndexChanged += comboBox1_SelectedIndexChanged;
             // 
             // textBox2
             // 
@@ -363,6 +382,7 @@
             textBox2.Name = "textBox2";
             textBox2.Size = new Size(227, 23);
             textBox2.TabIndex = 7;
+            textBox2.TextChanged += textBox2_TextChanged;
             // 
             // label4
             // 
@@ -408,6 +428,7 @@
             textBox1.Name = "textBox1";
             textBox1.Size = new Size(113, 23);
             textBox1.TabIndex = 2;
+            textBox1.TextChanged += textBox1_TextChanged;
             // 
             // pictureBox1
             // 
@@ -418,6 +439,7 @@
             pictureBox1.TabStop = false;
             pictureBox1.Click += pictureBox1_Click;
             pictureBox1.Paint += pictureBox1_Paint;
+            pictureBox1.MouseClick += pictureBox1_MouseClick;
             // 
             // Form1
             // 
@@ -481,5 +503,6 @@
         private Label label9;
         private ListBox listBox1;
         private Button button7;
+        private Label label10;
     }
 }
