@@ -39,6 +39,7 @@ namespace IOA_SemestralnaPraca
         {
             forwardStar = new ForwardStar(nodes, edges);
             dijkstra = new Dijkstra(forwardStar, nodes);
+            clarkeWright = new ClarkeWright(forwardStar, nodes, (int)numericUpDown1.Value);
         }
 
         private void DrawNetwork()
@@ -223,16 +224,6 @@ namespace IOA_SemestralnaPraca
 
         #endregion
 
-        private void label2_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label4_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
         {
             if (radioButton1.Checked)
@@ -245,16 +236,6 @@ namespace IOA_SemestralnaPraca
             }
         }
 
-        private void label6_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label5_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void button2_Click(object sender, EventArgs e)
         {
             if (int.TryParse(label10.Text, out int nodeId))
@@ -262,8 +243,8 @@ namespace IOA_SemestralnaPraca
                 var node = nodes.FirstOrDefault(n => n.ID == nodeId);
                 if (node != null)
                 {
-                    node.Coordinates.X = int.Parse(textBox1.Text);
-                    node.Coordinates.Y = int.Parse(textBox6.Text);
+                    node.Coordinates.X = double.Parse(textBox1.Text);
+                    node.Coordinates.Y = double.Parse(textBox6.Text);
                     node.Capacity = int.Parse(textBox2.Text);
                     node.Type = (NodeType)comboBox1.SelectedValue;
 
@@ -303,26 +284,6 @@ namespace IOA_SemestralnaPraca
                     MessageBox.Show("Nie je možné pridať alebo aktualizovať hranu. Jeden z uzlov neexistuje.");
                 }
             }
-        }
-
-        private void label9_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void pictureBox1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void pictureBox1_Paint(object sender, PaintEventArgs e)
-        {
-
-        }
-
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
         }
 
         private void button7_Click(object sender, EventArgs e)
@@ -415,56 +376,6 @@ namespace IOA_SemestralnaPraca
             }
         }
 
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void textBox6_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void textBox2_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void textBox4_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void textBox5_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void textBox3_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label10_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label11_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label12_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void groupBox1_Enter(object sender, EventArgs e)
-        {
-
-        }
-
         private void button1_Click(object sender, EventArgs e)
         {
             if (nodes.Any(n => n.Type == NodeType.PrimarySource) && (NodeType)comboBox1.SelectedValue == NodeType.PrimarySource)
@@ -495,8 +406,10 @@ namespace IOA_SemestralnaPraca
             if (int.TryParse(label10.Text, out int nodeId))
             {
                 var node = nodes.FirstOrDefault(n => n.ID == nodeId);
-                if (node != null && !edges.Any(e => e.NodeA.ID == nodeId || e.NodeB.ID == nodeId))
+                if (node != null)
                 {
+                    // Odstránenie všetkých hrán spojených s uzlom
+                    edges.RemoveAll(e => e.NodeA.ID == nodeId || e.NodeB.ID == nodeId);
                     nodes.Remove(node);
                     CreateForwardStar();
                     DrawNetwork();
@@ -504,7 +417,7 @@ namespace IOA_SemestralnaPraca
                 }
                 else
                 {
-                    MessageBox.Show("Uzol nie je možné zmazať, pretože je pripojený k iným uzlom.");
+                    MessageBox.Show("Uzol neexistuje.");
                 }
             }
         }
@@ -523,7 +436,7 @@ namespace IOA_SemestralnaPraca
                 }
                 else
                 {
-                    MessageBox.Show("Hranu nie je možné zmazať, pretože neexistuje.");
+                    MessageBox.Show("Hrana neexistuje.");
                 }
             }
         }

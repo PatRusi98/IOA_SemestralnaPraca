@@ -149,7 +149,6 @@
             label9.Size = new Size(92, 15);
             label9.TabIndex = 0;
             label9.Text = "Kapacita vozidla";
-            label9.Click += label9_Click;
             // 
             // groupBox4
             // 
@@ -174,7 +173,6 @@
             label12.Size = new Size(34, 15);
             label12.TabIndex = 16;
             label12.Text = "none";
-            label12.Click += label12_Click;
             // 
             // label11
             // 
@@ -184,7 +182,6 @@
             label11.Size = new Size(34, 15);
             label11.TabIndex = 15;
             label11.Text = "none";
-            label11.Click += label11_Click;
             // 
             // label8
             // 
@@ -275,7 +272,6 @@
             textBox5.Name = "textBox5";
             textBox5.Size = new Size(227, 23);
             textBox5.TabIndex = 10;
-            textBox5.TextChanged += textBox5_TextChanged;
             // 
             // textBox4
             // 
@@ -283,7 +279,6 @@
             textBox4.Name = "textBox4";
             textBox4.Size = new Size(227, 23);
             textBox4.TabIndex = 9;
-            textBox4.TextChanged += textBox4_TextChanged;
             // 
             // label6
             // 
@@ -293,7 +288,6 @@
             label6.Size = new Size(50, 15);
             label6.TabIndex = 5;
             label6.Text = "Vrchol 2";
-            label6.Click += label6_Click;
             // 
             // label5
             // 
@@ -303,7 +297,6 @@
             label5.Size = new Size(50, 15);
             label5.TabIndex = 4;
             label5.Text = "Vrchol 1";
-            label5.Click += label5_Click;
             // 
             // groupBox3
             // 
@@ -323,7 +316,6 @@
             textBox3.Name = "textBox3";
             textBox3.Size = new Size(172, 23);
             textBox3.TabIndex = 8;
-            textBox3.TextChanged += textBox3_TextChanged;
             // 
             // radioButton1
             // 
@@ -367,7 +359,6 @@
             groupBox1.TabIndex = 1;
             groupBox1.TabStop = false;
             groupBox1.Text = "Vrchol";
-            groupBox1.Enter += groupBox1_Enter;
             // 
             // button8
             // 
@@ -386,7 +377,6 @@
             label10.Name = "label10";
             label10.Size = new Size(0, 15);
             label10.TabIndex = 11;
-            label10.Click += label10_Click;
             // 
             // textBox6
             // 
@@ -394,7 +384,6 @@
             textBox6.Name = "textBox6";
             textBox6.Size = new Size(108, 23);
             textBox6.TabIndex = 10;
-            textBox6.TextChanged += textBox6_TextChanged;
             // 
             // button1
             // 
@@ -413,7 +402,6 @@
             comboBox1.Name = "comboBox1";
             comboBox1.Size = new Size(227, 23);
             comboBox1.TabIndex = 8;
-            comboBox1.SelectedIndexChanged += comboBox1_SelectedIndexChanged;
             // 
             // textBox2
             // 
@@ -421,7 +409,6 @@
             textBox2.Name = "textBox2";
             textBox2.Size = new Size(227, 23);
             textBox2.TabIndex = 7;
-            textBox2.TextChanged += textBox2_TextChanged;
             // 
             // label4
             // 
@@ -431,7 +418,6 @@
             label4.Size = new Size(25, 15);
             label4.TabIndex = 6;
             label4.Text = "Typ";
-            label4.Click += label4_Click;
             // 
             // label3
             // 
@@ -450,7 +436,6 @@
             label2.Size = new Size(59, 15);
             label2.TabIndex = 4;
             label2.Text = "Súradnice";
-            label2.Click += label2_Click;
             // 
             // label1
             // 
@@ -467,7 +452,6 @@
             textBox1.Name = "textBox1";
             textBox1.Size = new Size(113, 23);
             textBox1.TabIndex = 2;
-            textBox1.TextChanged += textBox1_TextChanged;
             // 
             // pictureBox1
             // 
@@ -476,8 +460,6 @@
             pictureBox1.Size = new Size(1111, 935);
             pictureBox1.TabIndex = 0;
             pictureBox1.TabStop = false;
-            pictureBox1.Click += pictureBox1_Click;
-            pictureBox1.Paint += pictureBox1_Paint;
             pictureBox1.MouseClick += pictureBox1_MouseClick;
             // 
             // Form1
