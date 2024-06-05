@@ -36,6 +36,8 @@
             numericUpDown1 = new NumericUpDown();
             label9 = new Label();
             groupBox4 = new GroupBox();
+            label12 = new Label();
+            label11 = new Label();
             label8 = new Label();
             label7 = new Label();
             button6 = new Button();
@@ -53,6 +55,7 @@
             radioButton1 = new RadioButton();
             radioButton2 = new RadioButton();
             groupBox1 = new GroupBox();
+            button8 = new Button();
             label10 = new Label();
             textBox6 = new TextBox();
             button1 = new Button();
@@ -150,6 +153,8 @@
             // 
             // groupBox4
             // 
+            groupBox4.Controls.Add(label12);
+            groupBox4.Controls.Add(label11);
             groupBox4.Controls.Add(label8);
             groupBox4.Controls.Add(label7);
             groupBox4.Controls.Add(button6);
@@ -160,6 +165,26 @@
             groupBox4.Size = new Size(364, 119);
             groupBox4.TabIndex = 11;
             groupBox4.TabStop = false;
+            // 
+            // label12
+            // 
+            label12.AutoSize = true;
+            label12.Location = new Point(96, 22);
+            label12.Name = "label12";
+            label12.Size = new Size(34, 15);
+            label12.TabIndex = 16;
+            label12.Text = "none";
+            label12.Click += label12_Click;
+            // 
+            // label11
+            // 
+            label11.AutoSize = true;
+            label11.Location = new Point(96, 51);
+            label11.Name = "label11";
+            label11.Size = new Size(34, 15);
+            label11.TabIndex = 15;
+            label11.Text = "none";
+            label11.Click += label11_Click;
             // 
             // label8
             // 
@@ -232,6 +257,7 @@
             button3.TabIndex = 12;
             button3.Text = "Zmazať";
             button3.UseVisualStyleBackColor = true;
+            button3.Click += button3_Click;
             // 
             // button2
             // 
@@ -324,6 +350,7 @@
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(button8);
             groupBox1.Controls.Add(label10);
             groupBox1.Controls.Add(textBox6);
             groupBox1.Controls.Add(button1);
@@ -340,6 +367,17 @@
             groupBox1.TabIndex = 1;
             groupBox1.TabStop = false;
             groupBox1.Text = "Vrchol";
+            groupBox1.Enter += groupBox1_Enter;
+            // 
+            // button8
+            // 
+            button8.Location = new Point(152, 148);
+            button8.Name = "button8";
+            button8.Size = new Size(75, 23);
+            button8.TabIndex = 13;
+            button8.Text = "Zmazať";
+            button8.UseVisualStyleBackColor = true;
+            button8.Click += button8_Click;
             // 
             // label10
             // 
@@ -366,6 +404,7 @@
             button1.TabIndex = 9;
             button1.Text = "Uložiť";
             button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
             // 
             // comboBox1
             // 
@@ -504,5 +543,8 @@
         private ListBox listBox1;
         private Button button7;
         private Label label10;
+        private Label label11;
+        private Label label12;
+        private Button button8;
     }
 }

@@ -52,8 +52,8 @@ namespace IOA_SemestralnaPraca.Algorithm
                 {
                     if (capacityA + capacityB <= _vehicleCapacity)
                     {
-                        routeA.RemoveAt(routeA.Count - 1);
-                        routeA.AddRange(routeB);
+                        routeA.RemoveAt(routeA.Count - 1); // Remove the last depot from routeA
+                        routeA.AddRange(routeB.Skip(1)); // Merge routes, skip the first depot in routeB
                         routes[saving.NodeA] = routeA;
                         routes[saving.NodeB] = routeA;
 
@@ -68,35 +68,19 @@ namespace IOA_SemestralnaPraca.Algorithm
                 }
             }
 
-            return routes.Values.Distinct().ToList();
+            // Remove duplicate routes and ensure each route starts and ends with the depot
+            var distinctRoutes = routes.Values.Distinct().Select(r =>
+            {
+                if (r.First() != _depot.ID) r.Insert(0, _depot.ID);
+                if (r.Last() != _depot.ID) r.Add(_depot.ID);
+                return r;
+            }).ToList();
+
+            return distinctRoutes;
         }
 
         private List<Saving> CalculateSavings()
         {
-            //var savings = new List<Saving>();
-
-            //foreach (var edge in _forwardStar.EdgesArray)
-            //{
-            //    if (edge.NodeA.ID == _depot.ID || edge.NodeB.ID == _depot.ID) continue;
-
-            //    //double savingValue = edge.Distance -
-            //    //    (_forwardStar.EdgesArray.First(e => e.NodeA.ID == _depot.ID && e.NodeB.ID == edge.NodeA.ID).Distance +
-            //    //     _forwardStar.EdgesArray.First(e => e.NodeA.ID == _depot.ID && e.NodeB.ID == edge.NodeB.ID).Distance);
-
-            //    //TODO
-            //    (bool, Edge) edge1 = _forwardStar.FindConnection(edge.NodeA.ID, edge.NodeB.ID);
-            //    (bool, Edge) edge2 = _forwardStar.FindConnection(edge.NodeA.ID, edge.NodeB.ID);
-
-            //    if (!edge1.Item1 || !edge2.Item1)
-            //        continue;
-
-            //    double savingValue = edge.Distance - _forwardStar.
-
-            //    savings.Add(new Saving(edge.NodeA.ID, edge.NodeB.ID, savingValue));
-            //}
-
-            //return savings;
-
             var savings = new List<Saving>();
 
             foreach (var edge in _forwardStar.EdgesArray)

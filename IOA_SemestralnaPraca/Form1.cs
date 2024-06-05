@@ -5,17 +5,19 @@ using IOA_SemestralnaPraca.Utils;
 using System.ComponentModel;
 using System.Drawing.Drawing2D;
 using static IOA_SemestralnaPraca.Utils.Enums;
+using static IOA_SemestralnaPraca.Utils.Helpers;
 
 namespace IOA_SemestralnaPraca
 {
     public partial class Form1 : Form
     {
-        private List<Node> nodes = new List<Node>();
-        private List<Edge> edges = new List<Edge>();
+        private List<Node> nodes = new();
+        private List<Edge> edges = new();
         private ForwardStar forwardStar;
         private Dijkstra dijkstra;
         private ClarkeWright clarkeWright;
-        private FileHandler fileHandler = new FileHandler();
+        private FileHandler fileHandler = new();
+        private int nextNodeID = 1;
 
         public Form1()
         {
@@ -107,6 +109,11 @@ namespace IOA_SemestralnaPraca
                 var textRect = new RectangleF(x + 5, y + 5, textSize.Width, textSize.Height);
                 graphics.FillRectangle(backgroundBrush, textRect);
                 graphics.DrawString(nodeID, boldFont, textBrush, textRect);
+
+                if (node.Type == NodeType.PrimarySource)
+                {
+                    label11.Text = node.ID.ToString();
+                }
             }
 
             pictureBox1.Image = bitmap;
@@ -151,9 +158,70 @@ namespace IOA_SemestralnaPraca
                 }
             }
 
+            nextNodeID = nodes.Count + 1;
+
             CreateForwardStar();
+            UpdateNetworkConnectivityLabel();
             DrawNetwork();
         }
+
+        private void UpdateNetworkConnectivityLabel()
+        {
+            if (IsNetworkConnected())
+            {
+                label12.Text = "súvislá";
+            }
+            else
+            {
+                label12.Text = "nesúvislá";
+            }
+        }
+
+        #region DEEP FIRST SEARCH - na kontrolu suvislosti siete
+        private bool IsNetworkConnected()
+        {
+            if (nodes.Count == 0)
+                return false;
+
+            var visited = new HashSet<int>();
+            var stack = new Stack<int>();
+            stack.Push(nodes[0].ID);
+
+            while (stack.Count > 0)
+            {
+                var current = stack.Pop();
+                if (!visited.Contains(current))
+                {
+                    visited.Add(current);
+                    var neighbors = GetNeighbors(current);
+                    foreach (var neighbor in neighbors)
+                    {
+                        if (!visited.Contains(neighbor))
+                        {
+                            stack.Push(neighbor);
+                        }
+                    }
+                }
+            }
+
+            return visited.Count == nodes.Count;
+        }
+
+        private List<int> GetNeighbors(int nodeId)
+        {
+            var neighbors = new List<int>();
+            int startIndex = forwardStar.NodePointers[nodeId - 1];
+            int endIndex = (nodeId < forwardStar.NodePointers.Count) ? forwardStar.NodePointers[nodeId] : forwardStar.EdgesArray.Count;
+
+            for (int i = startIndex; i < endIndex; i++)
+            {
+                neighbors.Add(forwardStar.EdgesArray[i].NodeB.ID);
+            }
+
+            return neighbors;
+        }
+
+        #endregion
 
         private void label2_Click(object sender, EventArgs e)
         {
@@ -167,7 +235,14 @@ namespace IOA_SemestralnaPraca
 
         private void radioButton1_CheckedChanged(object sender, EventArgs e)
         {
-
+            if (radioButton1.Checked)
+            {
+                textBox3.ReadOnly = true;
+            }
+            else
+            {
+                textBox3.ReadOnly = false;
+            }
         }
 
         private void label6_Click(object sender, EventArgs e)
@@ -182,7 +257,52 @@ namespace IOA_SemestralnaPraca
 
         private void button2_Click(object sender, EventArgs e)
         {
+            if (int.TryParse(label10.Text, out int nodeId))
+            {
+                var node = nodes.FirstOrDefault(n => n.ID == nodeId);
+                if (node != null)
+                {
+                    node.Coordinates.X = int.Parse(textBox1.Text);
+                    node.Coordinates.Y = int.Parse(textBox6.Text);
+                    node.Capacity = int.Parse(textBox2.Text);
+                    node.Type = (NodeType)comboBox1.SelectedValue;
 
+                    DrawNetwork();
+                    UpdateNetworkConnectivityLabel();
+                }
+            }
+            else if (int.TryParse(textBox4.Text, out int nodeAId) && int.TryParse(textBox5.Text, out int nodeBId))
+            {
+                var nodeA = nodes.FirstOrDefault(n => n.ID == nodeAId);
+                var nodeB = nodes.FirstOrDefault(n => n.ID == nodeBId);
+
+                if (nodeA != null && nodeB != null)
+                {
+                    var edge = edges.FirstOrDefault(e => (e.NodeA.ID == nodeAId && e.NodeB.ID == nodeBId) || (e.NodeA.ID == nodeBId && e.NodeB.ID == nodeAId));
+                    if (edge == null)
+                    {
+                        edge = new Edge { NodeA = nodeA, NodeB = nodeB };
+                        edges.Add(edge);
+                    }
+
+                    if (radioButton1.Checked)
+                    {
+                        edge.Distance = EuclideanDistance(nodeA.Coordinates, nodeB.Coordinates);
+                    }
+                    else
+                    {
+                        edge.Distance = double.Parse(textBox3.Text);
+                    }
+
+                    CreateForwardStar();
+                    DrawNetwork();
+                    UpdateNetworkConnectivityLabel();
+                }
+                else
+                {
+                    MessageBox.Show("Nie je možné pridať alebo aktualizovať hranu. Jeden z uzlov neexistuje.");
+                }
+            }
         }
 
         private void label9_Click(object sender, EventArgs e)
@@ -228,42 +348,70 @@ namespace IOA_SemestralnaPraca
             float scaleX = (float)pictureBox1.Width / 100;
             float scaleY = (float)pictureBox1.Height / 100;
 
-            foreach (var node in nodes)
+            if (e.Button == MouseButtons.Left)
             {
-                float x = (float)node.Coordinates.X * scaleX;
-                float y = (float)node.Coordinates.Y * scaleY;
-                var nodeRect = new RectangleF(x - 5, y - 5, 10, 10);
-
-                if (nodeRect.Contains(e.Location))
+                foreach (var node in nodes)
                 {
-                    label10.Text = node.ID.ToString();
-                    textBox1.Text = node.Coordinates.X.ToString();
-                    textBox6.Text = node.Coordinates.Y.ToString();
-                    textBox2.Text = node.Capacity.ToString();
-                    comboBox1.SelectedItem = node.Type.ToString();
-                    return;
+                    float x = (float)node.Coordinates.X * scaleX;
+                    float y = (float)node.Coordinates.Y * scaleY;
+                    var nodeRect = new RectangleF(x - 5, y - 5, 10, 10);
+
+                    if (nodeRect.Contains(e.Location))
+                    {
+                        label10.Text = node.ID.ToString();
+                        textBox1.Text = node.Coordinates.X.ToString();
+                        textBox6.Text = node.Coordinates.Y.ToString();
+                        textBox2.Text = node.Capacity.ToString();
+                        comboBox1.SelectedValue = node.Type;
+                        return;
+                    }
+                }
+
+                foreach (var edge in edges)
+                {
+                    var nodeA = edge.NodeA;
+                    var nodeB = edge.NodeB;
+                    float x1 = (float)nodeA.Coordinates.X * scaleX;
+                    float y1 = (float)nodeA.Coordinates.Y * scaleY;
+                    float x2 = (float)nodeB.Coordinates.X * scaleX;
+                    float y2 = (float)nodeB.Coordinates.Y * scaleY;
+
+                    var edgePath = new GraphicsPath();
+                    edgePath.AddLine(x1, y1, x2, y2);
+                    var edgePen = new Pen(Color.Black, 10);
+                    if (edgePath.IsOutlineVisible(e.Location, edgePen))
+                    {
+                        textBox4.Text = nodeA.ID.ToString();
+                        textBox5.Text = nodeB.ID.ToString();
+                        textBox3.Text = edge.Distance.ToString();
+                        return;
+                    }
                 }
             }
-
-            foreach (var edge in edges)
+            else if (e.Button == MouseButtons.Right)
             {
-                var nodeA = edge.NodeA;
-                var nodeB = edge.NodeB;
-                float x1 = (float)nodeA.Coordinates.X * scaleX;
-                float y1 = (float)nodeA.Coordinates.Y * scaleY;
-                float x2 = (float)nodeB.Coordinates.X * scaleX;
-                float y2 = (float)nodeB.Coordinates.Y * scaleY;
-
-                var edgePath = new GraphicsPath();
-                edgePath.AddLine(x1, y1, x2, y2);
-                var edgePen = new Pen(Color.Black, 10);
-                if (edgePath.IsOutlineVisible(e.Location, edgePen))
+                if (nodes.Any(n => n.Type == NodeType.PrimarySource) && (NodeType)comboBox1.SelectedValue == NodeType.PrimarySource)
                 {
-                    textBox4.Text = nodeA.ID.ToString();
-                    textBox5.Text = nodeB.ID.ToString();
-                    textBox3.Text = edge.Distance.ToString();
-                    return;
+                    comboBox1.SelectedValue = NodeType.Customer;
                 }
+
+                float x = e.X / scaleX;
+                float y = e.Y / scaleY;
+
+                textBox1.Text = Math.Round(x, 3).ToString();
+                textBox6.Text = Math.Round(y, 3).ToString();
+                var newNode = new Node
+                {
+                    ID = nextNodeID++,
+                    Coordinates = new Coordinates { X = Math.Round(x, 3), Y = Math.Round(y, 3) },
+                    Capacity = 100,
+                    Type = (NodeType)comboBox1.SelectedValue
+                };
+
+                nodes.Add(newNode);
+                CreateForwardStar();
+                DrawNetwork();
+                UpdateNetworkConnectivityLabel();
             }
         }
 
@@ -300,6 +448,84 @@ namespace IOA_SemestralnaPraca
         private void label10_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void label11_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label12_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void groupBox1_Enter(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (nodes.Any(n => n.Type == NodeType.PrimarySource) && (NodeType)comboBox1.SelectedValue == NodeType.PrimarySource)
+            {
+                comboBox1.SelectedValue = NodeType.Customer;
+            }
+
+            if (int.TryParse(label10.Text, out int nodeId))
+            {
+                var node = nodes.FirstOrDefault(n => n.ID == nodeId);
+                if (node != null)
+                {
+                    node.Coordinates.X = double.Parse(textBox1.Text);
+                    node.Coordinates.Y = double.Parse(textBox6.Text);
+                    node.Capacity = double.Parse(textBox2.Text);
+                    node.Type = (NodeType)comboBox1.SelectedValue;
+
+                    DrawNetwork();
+                    UpdateNetworkConnectivityLabel();
+                }
+            }
+
+            UpdateNetworkConnectivityLabel();
+        }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            if (int.TryParse(label10.Text, out int nodeId))
+            {
+                var node = nodes.FirstOrDefault(n => n.ID == nodeId);
+                if (node != null && !edges.Any(e => e.NodeA.ID == nodeId || e.NodeB.ID == nodeId))
+                {
+                    nodes.Remove(node);
+                    CreateForwardStar();
+                    DrawNetwork();
+                    UpdateNetworkConnectivityLabel();
+                }
+                else
+                {
+                    MessageBox.Show("Uzol nie je možné zmazať, pretože je pripojený k iným uzlom.");
+                }
+            }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            if (int.TryParse(textBox4.Text, out int nodeAId) && int.TryParse(textBox5.Text, out int nodeBId))
+            {
+                var edge = edges.FirstOrDefault(e => (e.NodeA.ID == nodeAId && e.NodeB.ID == nodeBId) || (e.NodeA.ID == nodeBId && e.NodeB.ID == nodeAId));
+                if (edge != null)
+                {
+                    edges.Remove(edge);
+                    CreateForwardStar();
+                    DrawNetwork();
+                    UpdateNetworkConnectivityLabel();
+                }
+                else
+                {
+                    MessageBox.Show("Hranu nie je možné zmazať, pretože neexistuje.");
+                }
+            }
         }
     }
 }
