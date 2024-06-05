@@ -76,7 +76,6 @@ namespace IOA_SemestralnaPraca
                 graphics.DrawString(i.ToString(), font, textBrush, 0, y);
             }
 
-            // Draw edges
             foreach (var edge in edges)
             {
                 var nodeA = edge.NodeA;
@@ -98,7 +97,6 @@ namespace IOA_SemestralnaPraca
                 graphics.DrawString(edgeValue, font, textBrush, textRect);
             }
 
-            // Draw nodes
             foreach (var node in nodes)
             {
                 float x = (float)node.Coordinates.X * scaleX;
@@ -131,7 +129,22 @@ namespace IOA_SemestralnaPraca
 
         private void SaveNetwork()
         {
-            // ulozenie siete
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Title = "Uložiť súbor s vrcholmi";
+            saveFileDialog.Filter = "Text Files|*.txt";
+
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                string nodeFilePath = saveFileDialog.FileName;
+                fileHandler.SaveNodes(nodeFilePath, nodes);
+
+                saveFileDialog.Title = "Uložiť súbor s hranami";
+                if (saveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    string edgeFilePath = saveFileDialog.FileName;
+                    fileHandler.SaveConnections(edgeFilePath, edges);
+                }
+            }
         }
 
         private void LoadNetwork()
@@ -326,6 +339,14 @@ namespace IOA_SemestralnaPraca
                         comboBox1.SelectedValue = node.Type;
                         return;
                     }
+                    else
+                    {
+                        label10.Text = "";
+                        textBox1.Text = "";
+                        textBox6.Text = "";
+                        textBox2.Text = "";
+                        comboBox1.SelectedValue = NodeType.Customer;
+                    }
                 }
 
                 foreach (var edge in edges)
@@ -346,6 +367,12 @@ namespace IOA_SemestralnaPraca
                         textBox5.Text = nodeB.ID.ToString();
                         textBox3.Text = edge.Distance.ToString();
                         return;
+                    }
+                    else
+                    {
+                        textBox4.Text = "";
+                        textBox5.Text = "";
+                        textBox3.Text = "";
                     }
                 }
             }
@@ -408,12 +435,17 @@ namespace IOA_SemestralnaPraca
                 var node = nodes.FirstOrDefault(n => n.ID == nodeId);
                 if (node != null)
                 {
-                    // Odstránenie všetkých hrán spojených s uzlom
-                    edges.RemoveAll(e => e.NodeA.ID == nodeId || e.NodeB.ID == nodeId);
-                    nodes.Remove(node);
-                    CreateForwardStar();
-                    DrawNetwork();
-                    UpdateNetworkConnectivityLabel();
+                    if (edges.Any(e => e.NodeA.ID == nodeId || e.NodeB.ID == nodeId))
+                    {
+                        MessageBox.Show("Nie je možné zmazať uzol, pretože je napojený na hrany.");
+                    }
+                    else
+                    {
+                        nodes.Remove(node);
+                        CreateForwardStar();
+                        DrawNetwork();
+                        UpdateNetworkConnectivityLabel();
+                    }
                 }
                 else
                 {

@@ -104,33 +104,28 @@ namespace IOA_SemestralnaPraca.Utils
             return loadedEdges;
         }
 
-        public (List<Node>, List<Edge>) LoadMatrixDistance(string path)
-        {
-            //TODO
-            var nodes = new List<Node>();
-            var edges = new List<Edge>();
-
-            throw new NotImplementedException();
-
-            //return (nodes, edges);
-        }
-
         public void SaveNodes(string path, List<Node> nodes)
         {
-            //TODO
-            throw new NotImplementedException();
+            using (StreamWriter writer = new StreamWriter(path))
+            {
+                foreach (var node in nodes)
+                {
+                    writer.WriteLine($"{node.ID}-{node.Capacity}");
+                    writer.WriteLine($"{node.Coordinates.X},{node.Coordinates.Y}");
+                }
+            }
         }
 
         public void SaveConnections(string path, List<Edge> edges)
         {
-            //TODO
-            throw new NotImplementedException();
-        }
-
-        public void SaveMatrixDistance(string path, List<Node> nodes, List<Edge> edges)
-        {
-            //TODO
-            throw new NotImplementedException();
+            using (StreamWriter writer = new StreamWriter(path))
+            {
+                writer.WriteLine("twoway");
+                foreach (var edge in edges)
+                {
+                    writer.WriteLine($"{edge.NodeA.ID},{edge.NodeB.ID}");
+                }
+            }
         }
     }
 }
