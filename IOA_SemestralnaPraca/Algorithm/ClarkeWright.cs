@@ -16,7 +16,14 @@ namespace IOA_SemestralnaPraca.Algorithm
         {
             _forwardStar = forwardStar;
             _nodes = nodes.ToDictionary(n => n.ID);
-            _depot = nodes.First(n => n.Type == NodeType.PrimarySource);
+            var primarySource = nodes.FirstOrDefault(n => n.Type == NodeType.PrimarySource);
+
+            if (primarySource == default)
+            {
+                primarySource = nodes.First();
+            }
+
+            _depot = primarySource;
             _vehicleCapacity = vehicleCapacity;
             var dijkstra = new Dijkstra(_forwardStar, nodes);
             _depotDistances = dijkstra.FindShortestPaths(_depot.ID);
@@ -52,8 +59,8 @@ namespace IOA_SemestralnaPraca.Algorithm
                 {
                     if (capacityA + capacityB <= _vehicleCapacity)
                     {
-                        routeA.RemoveAt(routeA.Count - 1); // Remove the last depot from routeA
-                        routeA.AddRange(routeB.Skip(1)); // Merge routes, skip the first depot in routeB
+                        routeA.RemoveAt(routeA.Count - 1);
+                        routeA.AddRange(routeB.Skip(1));
                         routes[saving.NodeA] = routeA;
                         routes[saving.NodeB] = routeA;
 
@@ -68,7 +75,6 @@ namespace IOA_SemestralnaPraca.Algorithm
                 }
             }
 
-            // Remove duplicate routes and ensure each route starts and ends with the depot
             var distinctRoutes = routes.Values.Distinct().Select(r =>
             {
                 if (r.First() != _depot.ID) r.Insert(0, _depot.ID);
